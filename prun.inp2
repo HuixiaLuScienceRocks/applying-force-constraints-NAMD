@@ -1,0 +1,162 @@
+# NAMD configuration file for p53 tetramer-p21 dna 
+
+# molecular system
+structure       S3.psf            
+coordinates     abeta-run.pdb         
+bincoordinates      abeta-prun1.rst.coor          
+binvelocities         abeta-prun1.rst.vel
+extendedsystem        abeta-prun1.rst.xsc
+firsttimestep   0
+
+# force field
+paratypecharmm  on
+parameters              toppar/par_all36m_prot.prm
+parameters              toppar/par_all36_na.prm
+parameters              toppar/par_all36_carb.prm
+parameters              toppar/par_all36_lipid.prm
+parameters              toppar/par_all36_cgenff.prm
+parameters              toppar/par_interface.prm
+parameters              toppar/toppar_all36_moreions.str
+parameters              toppar/toppar_all36_nano_lig.str
+parameters              toppar/toppar_all36_nano_lig_patch.str
+parameters              toppar/toppar_all36_synthetic_polymer.str
+parameters              toppar/toppar_all36_synthetic_polymer_patch.str
+parameters              toppar/toppar_all36_polymer_solvent.str
+parameters              toppar/toppar_water_ions.str
+parameters              toppar/toppar_dum_noble_gases.str
+parameters              toppar/toppar_ions_won.str
+parameters              toppar/cam.str
+parameters              toppar/toppar_all36_prot_arg0.str
+parameters              toppar/toppar_all36_prot_c36m_d_aminoacids.str
+parameters              toppar/toppar_all36_prot_fluoro_alkanes.str
+parameters              toppar/toppar_all36_prot_heme.str
+parameters              toppar/toppar_all36_prot_na_combined.str
+parameters              toppar/toppar_all36_prot_retinol.str
+parameters              toppar/toppar_all36_prot_model.str
+parameters              toppar/toppar_all36_prot_modify_res.str
+parameters              toppar/toppar_all36_na_nad_ppi.str
+parameters              toppar/toppar_all36_na_rna_modified.str
+parameters              toppar/toppar_all36_lipid_sphingo.str
+parameters              toppar/toppar_all36_lipid_archaeal.str
+parameters              toppar/toppar_all36_lipid_bacterial.str
+parameters              toppar/toppar_all36_lipid_cardiolipin.str
+parameters              toppar/toppar_all36_lipid_cholesterol.str
+parameters              toppar/toppar_all36_lipid_dag.str
+parameters              toppar/toppar_all36_lipid_inositol.str
+parameters              toppar/toppar_all36_lipid_lnp.str
+parameters              toppar/toppar_all36_lipid_lps.str
+parameters              toppar/toppar_all36_lipid_mycobacterial.str
+parameters              toppar/toppar_all36_lipid_miscellaneous.str
+parameters              toppar/toppar_all36_lipid_model.str
+parameters              toppar/toppar_all36_lipid_prot.str
+parameters              toppar/toppar_all36_lipid_tag.str
+parameters              toppar/toppar_all36_lipid_yeast.str
+parameters              toppar/toppar_all36_lipid_hmmm.str
+parameters              toppar/toppar_all36_lipid_detergent.str
+parameters              toppar/toppar_all36_lipid_ether.str
+parameters              toppar/toppar_all36_lipid_oxidized.str
+parameters              toppar/toppar_all36_carb_glycolipid.str
+parameters              toppar/toppar_all36_carb_glycopeptide.str
+parameters              toppar/toppar_all36_carb_imlab.str
+parameters              toppar/toppar_all36_label_spin.str
+parameters              toppar/toppar_all36_label_fluorophore.str
+parameters              toppar/toppar_all36_lipid_cationpi_wyf.str
+
+exclude         scaled1-4
+1-4scaling      1.0
+
+# approximations
+switching       on
+switchdist      10
+cutoff          11
+pairlistdist    12
+margin          1.0
+stepspercycle   20
+
+#PME
+PME yes
+PMEGridSizeX  192
+PMEGridSizeY  144
+PMEGridSizeZ  160
+FFTWUseWisdom no
+nonbondedFreq 2
+
+#protocol
+#temperature     0	#initial t
+seed            78133
+rigidBonds      all
+#reassignFreq    1000
+timestep        2.0
+
+langevin        on
+langevinDamping  10
+langevinTemp     330.0
+
+# Constant Pressure Control (variable volume)
+useGroupPressure      yes ;# needed for rigidBonds
+useFlexibleCell       no 
+useConstantArea       no 
+
+ langevinPiston        on
+ langevinPistonTarget  1.01325 ;#  in bar -> 1 atm
+ langevinPistonPeriod  100.
+ langevinPistonDecay   50.
+ langevinPistonTemp    330.0
+
+#reassignTemp    25
+#reassignIncr    25
+#reassignHold    300
+#tCouple   on
+#tCoupleTemp  300
+
+
+extraBonds no
+extraBondsFile phipsi.list
+
+fixedAtoms off
+fixedAtomsForces off
+fixedAtomsFile fixatoms.pdb
+fixedAtomsCol B
+
+freeEnergy off
+freeEnergyConfig {
+   urestraint {
+   
+     dist group {(PROG, 38, O )}
+          group {(PROG, 39, HA)} kf=6 ref=2.5
+          
+     dist group {(PROG, 1, O )}
+          group {(PROH, 2, HN)} kf=20 ref=2.0
+     dist group {(PROG, 3, HN )}
+          group {(PROH, 2, O )} kf=20 ref=2.0
+
+     dist group {(PROA, 16, HZ2 )}
+          group {(PROA, 42, OT2 )} kf=20 ref=1.85
+   }
+
+ pmf {
+   task = stop
+   lambda = 1
+   time = 1000 ps
+   print=10 ps
+    }
+}    
+
+# output  
+DCDunitcell     on
+wrapall         on
+outputname      abeta-prun2.out   # output PDB file
+restartname     abeta-prun2.rst
+DCDfile         abeta-prun2.dcd
+restartfreq     5000
+outputenergies  5000
+outputtiming    5000
+dcdfreq         5000
+binaryoutput    no
+     
+#minimize 500
+     
+# 1 ns a chunk
+run 250000 
+#  numsteps = 1000001
+

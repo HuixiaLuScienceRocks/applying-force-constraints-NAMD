@@ -1,0 +1,231 @@
+# NAMD configuration file for p53 tetramer-p21 dna 
+
+# molecular system
+structure       S3.psf            
+coordinates       abeta-run.pdb
+bincoordinates      abeta-heat.rst.coor          
+binvelocities         abeta-heat.rst.vel
+extendedsystem        abeta-heat.rst.xsc
+firsttimestep   0
+
+# force field
+paratypecharmm  on
+parameters              toppar/par_all36m_prot.prm
+parameters              toppar/par_all36_na.prm
+parameters              toppar/par_all36_carb.prm
+parameters              toppar/par_all36_lipid.prm
+parameters              toppar/par_all36_cgenff.prm
+parameters              toppar/par_interface.prm
+parameters              toppar/toppar_all36_moreions.str
+parameters              toppar/toppar_all36_nano_lig.str
+parameters              toppar/toppar_all36_nano_lig_patch.str
+parameters              toppar/toppar_all36_synthetic_polymer.str
+parameters              toppar/toppar_all36_synthetic_polymer_patch.str
+parameters              toppar/toppar_all36_polymer_solvent.str
+parameters              toppar/toppar_water_ions.str
+parameters              toppar/toppar_dum_noble_gases.str
+parameters              toppar/toppar_ions_won.str
+parameters              toppar/cam.str
+parameters              toppar/toppar_all36_prot_arg0.str
+parameters              toppar/toppar_all36_prot_c36m_d_aminoacids.str
+parameters              toppar/toppar_all36_prot_fluoro_alkanes.str
+parameters              toppar/toppar_all36_prot_heme.str
+parameters              toppar/toppar_all36_prot_na_combined.str
+parameters              toppar/toppar_all36_prot_retinol.str
+parameters              toppar/toppar_all36_prot_model.str
+parameters              toppar/toppar_all36_prot_modify_res.str
+parameters              toppar/toppar_all36_na_nad_ppi.str
+parameters              toppar/toppar_all36_na_rna_modified.str
+parameters              toppar/toppar_all36_lipid_sphingo.str
+parameters              toppar/toppar_all36_lipid_archaeal.str
+parameters              toppar/toppar_all36_lipid_bacterial.str
+parameters              toppar/toppar_all36_lipid_cardiolipin.str
+parameters              toppar/toppar_all36_lipid_cholesterol.str
+parameters              toppar/toppar_all36_lipid_dag.str
+parameters              toppar/toppar_all36_lipid_inositol.str
+parameters              toppar/toppar_all36_lipid_lnp.str
+parameters              toppar/toppar_all36_lipid_lps.str
+parameters              toppar/toppar_all36_lipid_mycobacterial.str
+parameters              toppar/toppar_all36_lipid_miscellaneous.str
+parameters              toppar/toppar_all36_lipid_model.str
+parameters              toppar/toppar_all36_lipid_prot.str
+parameters              toppar/toppar_all36_lipid_tag.str
+parameters              toppar/toppar_all36_lipid_yeast.str
+parameters              toppar/toppar_all36_lipid_hmmm.str
+parameters              toppar/toppar_all36_lipid_detergent.str
+parameters              toppar/toppar_all36_lipid_ether.str
+parameters              toppar/toppar_all36_lipid_oxidized.str
+parameters              toppar/toppar_all36_carb_glycolipid.str
+parameters              toppar/toppar_all36_carb_glycopeptide.str
+parameters              toppar/toppar_all36_carb_imlab.str
+parameters              toppar/toppar_all36_label_spin.str
+parameters              toppar/toppar_all36_label_fluorophore.str
+parameters              toppar/toppar_all36_lipid_cationpi_wyf.str
+
+exclude         scaled1-4
+1-4scaling      1.0
+
+# approximations
+switching       on
+switchdist      10
+cutoff          11
+pairlistdist    12
+margin          1.0
+stepspercycle   20
+
+#PME
+PME yes
+PMEGridSizeX  192
+PMEGridSizeY  144
+PMEGridSizeZ  160
+FFTWUseWisdom no
+nonbondedFreq 2
+
+#protocol
+#temperature     0	#initial t
+seed            78133
+rigidBonds      all
+ reassignFreq    1000
+timestep        1.0
+
+langevin        on
+langevinDamping 10
+langevinTemp    300.0
+
+# Constant Pressure Control (variable volume)
+useGroupPressure      yes ;# needed for rigidBonds
+useFlexibleCell       no
+useConstantArea       no
+
+langevinPiston        on
+langevinPistonTarget  1.01325 ;#  in bar -> 1 atm
+langevinPistonPeriod  100.
+langevinPistonDecay   50.
+langevinPistonTemp    300.0
+
+ reassignTemp    100
+ reassignIncr    2
+ reassignHold    300
+
+
+extraBonds on
+extraBondsFile phipsi.list
+
+freeEnergy on
+freeEnergyConfig {
+#// a forcing restraint will be imposed on the distance between the centers-of-mass of residues (10 to 15) and
+#// residues (30 to 35). low=20.0, hi=10.0, indicates that the reference distance is 20.0at λ=0, and 10.0at λ=1.
+   urestraint {
+     dist pmf group {(PRON, 64, HN )}
+              group {(PROO, 60, O)} kf=20, low=1.9, hi=2.1
+     dist pmf group {(PRON, 62, O )}
+              group {(PROO, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist pmf group {(PRON, 62, HN )}
+              group {(PROO, 62, O)} kf=20, low=1.9, hi=2.1
+     dist pmf group {(PRON, 60, O )}
+              group {(PROO, 64, HN )} kf=20, low=1.9, hi=2.1 
+
+     dist dist group {(PROM, 64, HN )}
+               group {(PROP, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROM, 62, O )}
+               group {(PROP, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROM, 62, HN )}
+               group {(PROP, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROM, 60, O )}
+               group {(PROP, 64, HN )} kf=20, low=1.9, hi=2.1 
+
+     dist dist group {(PROB, 64, HN )}
+               group {(PROC, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROB, 62, O )}
+               group {(PROC, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROB, 62, HN )}
+               group {(PROC, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROB, 60, O )}
+               group {(PROC, 64, HN )} kf=20, low=1.9, hi=2.1 
+
+     dist dist group {(PROC, 64, HN )}
+               group {(PROD, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROC, 62, O )}
+               group {(PROD, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROC, 62, HN )}
+               group {(PROD, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROC, 60, O )}
+               group {(PROD, 64, HN )} kf=20, low=1.9, hi=2.1 
+
+     dist dist group {(PROJ, 64, HN )}
+               group {(PROK, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROJ, 62, O )}
+               group {(PROK, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROJ, 62, HN )}
+               group {(PROK, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROJ, 60, O )}
+               group {(PROK, 64, HN )} kf=20, low=1.9, hi=2.1 
+
+     dist dist group {(PROI, 64, HN )}
+               group {(PROL, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROI, 62, O )}
+               group {(PROL, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROI, 62, HN )}
+               group {(PROL, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROI, 60, O )}
+               group {(PROL, 64, HN )} kf=20, low=1.9, hi=2.1
+
+     dist dist group {(PROF, 64, HN )}
+               group {(PROG, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROF, 62, O )}
+               group {(PROG, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROF, 62, HN )}
+               group {(PROG, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROF, 60, O )}
+               group {(PROG, 64, HN )} kf=20, low=1.9, hi=2.1
+
+     dist dist group {(PROE, 64, HN )}
+               group {(PROH, 60, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROE, 62, O )}
+               group {(PROH, 62, HN )} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROE, 62, HN )}
+               group {(PROH, 62, O)} kf=20, low=1.9, hi=2.1
+     dist dist group {(PROE, 60, O )}
+               group {(PROH, 64, HN )} kf=20, low=1.9, hi=2.1                              
+   }
+
+#// 1. during the initial 10 ps, increase the strength of the forcing restraint to full strength: 0 → 20 kcal/(mol 2)
+#// 2. next, apply a force to slowly close the distance from 2.1 to 1.9 (λ changes from 0 → 1)
+#// 3. accumulate dU/dλ for another 10 ps. ( stays fixed at 1)
+#// 4. force the distance back to its initial value of 20 ( changes from 1 → 0)
+ pmf {
+   task = grow
+   time = 10 ps
+   print = 1 ps
+    }
+ pmf {
+   task = up
+   time = 10 ps
+    }
+ pmf {
+   task = stop
+   time = 10 ps
+    }
+ pmf {
+   task = down
+   time = 10 ps
+    }
+}    
+# output
+DCDunitcell     on
+wrapall         on
+outputname      abeta-heat2.out   # output PDB file
+restartname     abeta-heat2.rst
+DCDfile         abeta-heat2.dcd
+restartfreq     1000
+outputenergies  5000
+outputtiming    5000
+dcdfreq         5000
+binaryoutput    yes
+
+#minimize 500
+
+# 1 ns a chunk
+run 40000 
+#  numsteps =  150001
+
