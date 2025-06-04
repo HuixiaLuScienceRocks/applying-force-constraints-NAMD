@@ -75,9 +75,7 @@ stepspercycle   20
 
 #PME
 PME yes
-PMEGridSizeX  192
-PMEGridSizeY  144
-PMEGridSizeZ  160
+PMEGridSpacing 1.0
 FFTWUseWisdom no
 nonbondedFreq 2
 
@@ -90,57 +88,27 @@ timestep        2.0
 
 langevin        on
 langevinDamping  10
-langevinTemp     330.0
+langevinTemp     300.0
 
 # Constant Pressure Control (variable volume)
 useGroupPressure      yes ;# needed for rigidBonds
-useFlexibleCell       no 
-useConstantArea       no 
+useFlexibleCell       yes  ;# no for water box, yes for membrane
+useConstantArea       no ;# no for water box, maybe for membrane
+SurfaceTensionTarget  0.0
 
- langevinPiston        on
- langevinPistonTarget  1.01325 ;#  in bar -> 1 atm
- langevinPistonPeriod  100.
- langevinPistonDecay   50.
- langevinPistonTemp    330.0
+langevinPiston        on
+langevinPistonTarget  1.01325 ;#  in bar -> 1 atm
+langevinPistonPeriod  100.
+langevinPistonDecay   50.
+langevinPistonTemp    300.0
 
-#reassignTemp    25
-#reassignIncr    25
-#reassignHold    300
-#tCouple   on
-#tCoupleTemp  300
-
-
-extraBonds no
+extraBonds off
 extraBondsFile phipsi.list
 
 fixedAtoms off
 fixedAtomsForces off
 fixedAtomsFile fixatoms.pdb
 fixedAtomsCol B
-
-freeEnergy off
-freeEnergyConfig {
-   urestraint {
-   
-     dist group {(PROG, 38, O )}
-          group {(PROG, 39, HA)} kf=6 ref=2.5
-          
-     dist group {(PROG, 1, O )}
-          group {(PROH, 2, HN)} kf=20 ref=2.0
-     dist group {(PROG, 3, HN )}
-          group {(PROH, 2, O )} kf=20 ref=2.0
-
-     dist group {(PROA, 16, HZ2 )}
-          group {(PROA, 42, OT2 )} kf=20 ref=1.85
-   }
-
- pmf {
-   task = stop
-   lambda = 1
-   time = 1000 ps
-   print=10 ps
-    }
-}    
 
 # output  
 DCDunitcell     on
@@ -152,7 +120,7 @@ restartfreq     5000
 outputenergies  5000
 outputtiming    5000
 dcdfreq         5000
-binaryoutput    no
+binaryoutput    yes
      
 #minimize 500
      
