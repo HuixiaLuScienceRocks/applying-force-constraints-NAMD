@@ -3,4 +3,4 @@
 #Go to NAMD user guide page 66-71 for more indication.
 ### Fine tune protein structures---newly established method
 
-#### Cresit goes to Dr. Huixia Lu, 04 June 2025
+### Credit attributed to Dr. Huixia Lu, 4 June 2025
