@@ -6,4 +6,7 @@
 ### Credit attributed to Dr. Huixia Lu, 4 June 2025
 
 ## Results:
-The image **beginning.png** displays the initial atomic distances prior to fine-tuning, showing *unstable packing between protein monomers*. In contrast, **fine-tuning-16mer.png** shows the refined distances after fine-tuning, where a*nti-beta parallel alignment between monomers has been established*.
+The image **beginning.png** displays the initial atomic distances prior to fine-tuning, showing *unstable packing between protein monomers*. 
+![beginning.png](https://github.com/HuixiaLuScienceRocks/applying-force-constraints-NAMD/blob/main/begining.png)
+
+In contrast, **fine-tuning-16mer.png** shows the refined distances after fine-tuning, where a*nti-beta parallel alignment between monomers has been established*.
