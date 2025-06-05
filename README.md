@@ -10,3 +10,4 @@ The image **beginning.png** displays the initial atomic distances prior to fine-
 ![beginning.png](https://github.com/HuixiaLuScienceRocks/applying-force-constraints-NAMD/blob/main/begining.png)
 
 In contrast, **fine-tuning-16mer.png** shows the refined distances after fine-tuning, where a*nti-beta parallel alignment between monomers has been established*.
+![fine-tuning-16mer.png](https://github.com/HuixiaLuScienceRocks/applying-force-constraints-NAMD/blob/main/fine-tunning-16mer.png)
