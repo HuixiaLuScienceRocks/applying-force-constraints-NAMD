@@ -6,5 +6,4 @@
 ### Credit attributed to Dr. Huixia Lu, 4 June 2025
 
 ## Results:
-**beginning.png** shows the meaningful atomic distance before fine tunning (*unstable packing between monomers of protein molecule*), and **fine-tunning-16mer.png** shows the corresponding distances after fine-tunning (*anti-beta paralelling between monomers has been established*).
-
+The image **beginning.png** displays the initial atomic distances prior to fine-tuning, showing *unstable packing between protein monomers*. In contrast, **fine-tuning-16mer.png** shows the refined distances after fine-tuning, where a*nti-beta parallel alignment between monomers has been established*.
